@@ -7,6 +7,18 @@ public class Main
 	{
 		// TODO Auto-generated method stub
 		new Controller();
+		String name;
+		String name;
+		String name;
+		String name;
+		String name;
+		String name;
+		String name;
+		String name;
+		String name;
+		String name;
+		String name;
+		String name;
 	}
 
 }
