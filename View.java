@@ -106,10 +106,10 @@ public class View extends JFrame {
         if (btnspeichen == null) {
             btnspeichen = new JButton("");
             btnspeichen.setBounds(607, 391, 49, 38);
-            
+
             // Original Icon laden
             ImageIcon icon = new ImageIcon("C:\\Users\\jamal\\OneDrive\\Desktop\\Image(9).jpg");
-            
+
             // Bild skalieren
             Image img = icon.getImage().getScaledInstance(
                     44, 38, Image.SCALE_SMOOTH
@@ -118,6 +118,25 @@ public class View extends JFrame {
             // Skaliertes Bild wieder als Icon setzen
             ImageIcon scaledIcon = new ImageIcon(img);
             btnspeichen.setIcon(scaledIcon);
+
+            // ActionListener hinzufügen
+            btnspeichen.addActionListener(e -> {
+                SaveChatDialog dialog = new SaveChatDialog(this);
+                if (dialog.isSaved()) {
+                    String chatName = dialog.getChatName();
+                    // Chat wird gespeichert mit dem Namen
+                    System.out.println("Chat gespeichert als: " + chatName);
+                    
+                    // Chat zurücksetzen (null setzen)
+                    textPaneTextverlauf.setText("");
+                    textPaneEingabe.setText("");
+                    
+                    JOptionPane.showMessageDialog(this, 
+                        "Chat '" + chatName + "' wurde gespeichert!", 
+                        "Erfolg", 
+                        JOptionPane.INFORMATION_MESSAGE);
+                }
+            });
         }
         return btnspeichen;
     }
