@@ -12,25 +12,31 @@ public class View extends JFrame {
 
     private JPanel contentPane;
 
-    private JList listThemenVerlauf; 
+    private JList<String> listThemenVerlauf;
     private JButton btnSenden;
-    private JTextPane textPaneEingabe;  
-    private JTextPane textPaneTextverlauf; 
+    private JTextPane textPaneEingabe;
+    private JTextPane textPaneTextverlauf;
     private JScrollPane scrollVerlauf;
-    private JScrollPane scrollEingabe;   
+    private JScrollPane scrollEingabe;
     private JButton btnspeichen;
+    
     public View() {
         initialize();
     }
 
     private void initialize() {
-        setTitle("RESTful KI Chat");
+        setTitle("Restful KI Chat");
+        
+        // Logo im Titel-Bar setzen
+        ImageIcon icon = new ImageIcon("C:\\Users\\jamal\\OneDrive\\Desktop\\Image (3).jpg");
+        setIconImage(icon.getImage());
+        
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 700, 480);
 
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5,5,5,5));
-        contentPane.setLayout(null); // falls du absolute Positionen behalten willst
+        contentPane.setLayout(null);
         setContentPane(contentPane);
 
         contentPane.add(getListThemenVerlauf());
@@ -46,14 +52,14 @@ public class View extends JFrame {
         contentPane.add(scrollEingabe);
 
         contentPane.add(getBtnSenden());
+        contentPane.add(getBtnspeichen());
 
         setVisible(true);
-    	contentPane.add(getBtnspeichen());
     }
 
-    protected JList getListThemenVerlauf() {
+    protected JList<String> getListThemenVerlauf() {
         if (listThemenVerlauf == null) {
-            listThemenVerlauf = new JList();
+            listThemenVerlauf = new JList<>();
             listThemenVerlauf.setBounds(23, 10, 207, 419);
         }
         return listThemenVerlauf;
@@ -95,30 +101,24 @@ public class View extends JFrame {
         }
         return textPaneTextverlauf;
     }
-    private JButton getBtnspeichen() {
+    
+    protected JButton getBtnspeichen() {
         if (btnspeichen == null) {
             btnspeichen = new JButton("");
-
             btnspeichen.setBounds(607, 391, 49, 38);
-
-            // Bild laden
-            ImageIcon icon = new ImageIcon(
-                "C:\\Users\\jamal\\OneDrive\\Desktop\\Image(9).jpg"
-            );
-
-            // Bild auf Button-Größe skalieren
+            
+            // Original Icon laden
+            ImageIcon icon = new ImageIcon("C:\\Users\\jamal\\OneDrive\\Desktop\\Image(9).jpg");
+            
+            // Bild skalieren
             Image img = icon.getImage().getScaledInstance(
                     44, 38, Image.SCALE_SMOOTH
             );
 
-            btnspeichen.setIcon(new ImageIcon(img));
-
-            btnspeichen.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                }
-            });
+            // Skaliertes Bild wieder als Icon setzen
+            ImageIcon scaledIcon = new ImageIcon(img);
+            btnspeichen.setIcon(scaledIcon);
         }
         return btnspeichen;
     }
-	
 }
