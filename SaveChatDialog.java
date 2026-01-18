@@ -1,93 +1,67 @@
 package RESTFULKICHAT;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public class SaveChatDialog extends JDialog {
+public class SaveChatDialog extends JDialog 
+{
 
-    private static final long serialVersionUID = 1L;
-
-    private JPanel contentPane;
-    private JLabel labelChatName;
-    private JTextField textFieldChatName;
-    private JButton btnSave;
-
-    private String chatName;
     private boolean saved = false;
+    private boolean lokal = true;
+    private JTextField txtName;
 
-    public SaveChatDialog(JFrame parent) {
+    // Konstruktor Dialog
+    public SaveChatDialog(JFrame parent) 
+    {
         super(parent, "Chat speichern", true);
-        initialize();
-    }
+        setSize(360, 160);
+        setLocationRelativeTo(parent);
+        setLayout(new BorderLayout(10, 10));
 
-    private void initialize() {
-        setBounds(100, 100, 354, 137);
-        setLocationRelativeTo(getParent());
-        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        txtName = new JTextField();
+        add(new JLabel("Chatname:"), BorderLayout.NORTH);
+        add(txtName, BorderLayout.CENTER);
 
-        contentPane = new JPanel();
-        contentPane.setBorder(new EmptyBorder(20, 20, 20, 20));
-        contentPane.setLayout(null);
-        setContentPane(contentPane);
+        JPanel btns = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton btnLokal = new JButton("Lokal speichern");
+        JButton btnFrei = new JButton("Speicherort wählen");
 
-        contentPane.add(getLabelChatName());
-        contentPane.add(getTextFieldChatName());
-        contentPane.add(getBtnSave());
+        btnLokal.addActionListener(e -> speichern(true));
+        btnFrei.addActionListener(e -> speichern(false));
+
+        btns.add(btnFrei);
+        btns.add(btnLokal);
+        add(btns, BorderLayout.SOUTH);
 
         setVisible(true);
     }
 
-    private JLabel getLabelChatName() {
-        if (labelChatName == null) {
-            labelChatName = new JLabel("Chat Name:");
-            labelChatName.setBounds(30, 12, 100, 25);
-            labelChatName.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+    private void speichern(boolean lokal) 
+    {
+        // setzt die Auswahl und schließt den Dialog
+        if (!txtName.getText().trim().isEmpty()) 
+        {
+            this.lokal = lokal;
+            saved = true;
+            dispose();
         }
-        return labelChatName;
     }
 
-    private JTextField getTextFieldChatName() {
-        if (textFieldChatName == null) {
-            textFieldChatName = new JTextField();
-            textFieldChatName.setBounds(117, 11, 220, 25);
-            textFieldChatName.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        }
-        return textFieldChatName;
-    }
-
-    private JButton getBtnSave() {
-        if (btnSave == null) {
-            btnSave = new JButton("Save");
-            btnSave.setBounds(238, 57, 84, 25);
-            btnSave.setBackground(new Color(16, 185, 129));
-            btnSave.setForeground(Color.WHITE);
-            btnSave.setFont(new Font("Segoe UI", Font.BOLD, 14));
-            btnSave.setFocusPainted(false);
-
-            btnSave.addActionListener(e -> {
-                chatName = textFieldChatName.getText().trim();
-                if (!chatName.isEmpty()) {
-                    saved = true;
-                    dispose();
-                } else {
-                    JOptionPane.showMessageDialog(
-                            this,
-                            "Bitte geben Sie einen Chat-Namen ein!",
-                            "Fehler",
-                            JOptionPane.ERROR_MESSAGE
-                    );
-                }
-            });
-        }
-        return btnSave;
-    }
-
-    public String getChatName() {
-        return chatName;
-    }
-
-    public boolean isSaved() {
+    public boolean isSaved() 
+    {
+        // gibt zurück ob gespeichert wurde
         return saved;
+    }
+
+    public boolean istLokal() 
+    {
+        // gibt zurück ob lokal gespeichert werden soll
+        return lokal;
+    }
+
+    public String getName() 
+    {
+        // gibt den eingegebenen Chatnamen zurück
+        return txtName.getText().trim();
     }
 }

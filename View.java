@@ -1,143 +1,52 @@
 package RESTFULKICHAT;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class View extends JFrame {
 
-    private static final long serialVersionUID = 1L;
+    public JList<String> liste = new JList<>();
+    public JTextPane verlauf = new JTextPane();
+    public JTextPane eingabe = new JTextPane();
 
-    private JPanel contentPane;
+    public JButton senden = new JButton("➤");
+    public JButton speichern = new JButton("Speichern");
+    public JButton loeschen = new JButton("Chat löschen");
+    public JButton neuerChat = new JButton("Neuer Chat");
 
-    private JList<String> listThemenVerlauf;
-    private JButton btnSenden;
-    private JTextPane textPaneEingabe;
-    private JTextPane textPaneTextverlauf;
-    private JScrollPane scrollVerlauf;
-    private JScrollPane scrollEingabe;
-    private JButton btnspeichen;
-    
     public View() {
-        initialize();
-    }
-
-    private void initialize() {
         setTitle("Restful KI Chat");
-        
-        // Logo im Titel-Bar setzen
-        ImageIcon icon = new ImageIcon("C:\\Users\\jamal\\OneDrive\\Desktop\\Image (3).jpg");
-        setIconImage(icon.getImage());
-        
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 700, 480);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setSize(900, 600);
 
-        contentPane = new JPanel();
-        contentPane.setBorder(new EmptyBorder(5,5,5,5));
-        contentPane.setLayout(null);
-        setContentPane(contentPane);
+        // ===== LINKS =====
+        JPanel links = new JPanel(new BorderLayout(5,5));
+        links.add(new JScrollPane(liste), BorderLayout.CENTER);
 
-        contentPane.add(getListThemenVerlauf());
+        JPanel linksButtons = new JPanel(new GridLayout(3,1,5,5));
+        linksButtons.add(neuerChat);
+        linksButtons.add(speichern);
+        linksButtons.add(loeschen);
 
-        scrollVerlauf = new JScrollPane(getTextPaneTextverlauf());
-        scrollVerlauf.setBounds(256, 10, 400, 330);
-        scrollVerlauf.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        contentPane.add(scrollVerlauf);
+        links.add(linksButtons, BorderLayout.SOUTH);
 
-        scrollEingabe = new JScrollPane(getTextPaneEingabe());
-        scrollEingabe.setBounds(256, 351, 341, 78);
-        scrollEingabe.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        contentPane.add(scrollEingabe);
+        // ===== RECHTS =====
+        JPanel rechts = new JPanel(new BorderLayout(5,5));
+        verlauf.setEditable(false);
+        rechts.add(new JScrollPane(verlauf), BorderLayout.CENTER);
 
-        contentPane.add(getBtnSenden());
-        contentPane.add(getBtnspeichen());
+        JPanel unten = new JPanel(new BorderLayout(5,5));
+        unten.add(new JScrollPane(eingabe), BorderLayout.CENTER);
+        unten.add(senden, BorderLayout.EAST);
 
+        rechts.add(unten, BorderLayout.SOUTH);
+
+        // ===== SPLIT =====
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, links, rechts);
+        split.setDividerLocation(250);
+
+        add(split);
+        setLocationRelativeTo(null);
         setVisible(true);
-    }
-
-    protected JList<String> getListThemenVerlauf() {
-        if (listThemenVerlauf == null) {
-            listThemenVerlauf = new JList<>();
-            listThemenVerlauf.setBounds(23, 10, 207, 419);
-        }
-        return listThemenVerlauf;
-    }
-
-    protected JButton getBtnSenden() {
-        if (btnSenden == null) {
-            btnSenden = new JButton("");
-            btnSenden.setBounds(607, 351, 49, 38);
-
-            // Original Icon laden
-            ImageIcon icon = new ImageIcon("C:\\Users\\jamal\\OneDrive\\Desktop\\1111.jpg");
-
-            // Bild skalieren
-            Image img = icon.getImage().getScaledInstance(
-                    59, 53, Image.SCALE_SMOOTH
-            );
-
-            // Skaliertes Bild wieder als Icon setzen
-            ImageIcon scaledIcon = new ImageIcon(img);
-            btnSenden.setIcon(scaledIcon);
-        }
-        return btnSenden;
-    }
-
-    protected JTextPane getTextPaneEingabe() {
-        if (textPaneEingabe == null) {
-            textPaneEingabe = new JTextPane();
-            // Zeilenumbruch im JTextPane standardmäßig aktiv
-        }
-        return textPaneEingabe;
-    }
-
-    protected JTextPane getTextPaneTextverlauf() {
-        if (textPaneTextverlauf == null) {
-            textPaneTextverlauf = new JTextPane();
-            textPaneTextverlauf.setEditable(false); // Verlauf nur lesen
-            // Optional: Style für bessere Lesbarkeit
-        }
-        return textPaneTextverlauf;
-    }
-    
-    protected JButton getBtnspeichen() {
-        if (btnspeichen == null) {
-            btnspeichen = new JButton("");
-            btnspeichen.setBounds(607, 391, 49, 38);
-
-            // Original Icon laden
-            ImageIcon icon = new ImageIcon("C:\\Users\\jamal\\OneDrive\\Desktop\\Image(9).jpg");
-
-            // Bild skalieren
-            Image img = icon.getImage().getScaledInstance(
-                    44, 38, Image.SCALE_SMOOTH
-            );
-
-            // Skaliertes Bild wieder als Icon setzen
-            ImageIcon scaledIcon = new ImageIcon(img);
-            btnspeichen.setIcon(scaledIcon);
-
-            // ActionListener hinzufügen
-            btnspeichen.addActionListener(e -> {
-                SaveChatDialog dialog = new SaveChatDialog(this);
-                if (dialog.isSaved()) {
-                    String chatName = dialog.getChatName();
-                    // Chat wird gespeichert mit dem Namen
-                    System.out.println("Chat gespeichert als: " + chatName);
-                    
-                    // Chat zurücksetzen (null setzen)
-                    textPaneTextverlauf.setText("");
-                    textPaneEingabe.setText("");
-                    
-                    JOptionPane.showMessageDialog(this, 
-                        "Chat '" + chatName + "' wurde gespeichert!", 
-                        "Erfolg", 
-                        JOptionPane.INFORMATION_MESSAGE);
-                }
-            });
-        }
-        return btnspeichen;
     }
 }
